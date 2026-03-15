@@ -10,8 +10,14 @@ import { WhatsappCta } from "@/components/homepage/whatsapp-cta";
 import { Newsletter } from "@/components/homepage/newsletter";
 import { Footer } from "@/components/homepage/footer";
 import { WhatsappFloat } from "@/components/homepage/whatsapp-float";
+import { fetchStorefrontCategories, fetchStorefrontProducts } from "@/lib/storefront-api";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [categories, products] = await Promise.all([
+    fetchStorefrontCategories(8).catch(() => []),
+    fetchStorefrontProducts(8).catch(() => []),
+  ]);
+
   return (
     <main className="min-h-screen">
       {/* Header Area */}
@@ -22,10 +28,10 @@ export default function HomePage() {
       <Hero />
 
       {/* Featured Categories */}
-      <Categories />
+      <Categories categories={categories} />
 
       {/* Featured Products */}
-      <FeaturedProducts />
+      <FeaturedProducts products={products} />
 
       {/* Trust Badges - Why Choose Us */}
       <TrustBadges />
